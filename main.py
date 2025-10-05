@@ -1,7 +1,7 @@
 # main.py
 
 from students import StudentManager, StudentExistsError, StudentNotFoundError
-
+from students.api_importer import APIImporter
 
 def print_menu():
     """Display the main menu options."""
@@ -14,6 +14,7 @@ def print_menu():
     print("6. Show class average")
     print("7. Export to CSV")
     print("8. Save & Exit")
+    print("9. Import random students from API")
 
 
 def main():
@@ -28,7 +29,7 @@ def main():
 
     while True:
         print_menu()
-        choice = input("Choose an option (1-8): ").strip()
+        choice = input("Choose an option (1-9): ").strip()
 
         try:
             if choice == "1":
@@ -92,6 +93,16 @@ def main():
                 manager.save_students()
                 print("👋 Goodbye!")
                 break
+
+            elif choice == "9":
+                importer = APIImporter()
+                new_students = importer.fetch_students()
+                for student in new_students:
+                    try:
+                        manager.add_student(student.name, student.scores)
+                        print(f"✅ Added {student}")
+                    except StudentExistsError:
+                        print(f"⚠️ {student.name} already exists, skipped")
 
             else:
                 print("⚠️ Invalid choice, please choose 1-8.")
