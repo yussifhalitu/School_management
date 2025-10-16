@@ -2,6 +2,8 @@
 
 from students import StudentManager, StudentExistsError, StudentNotFoundError
 from students.api_importer import APIImporter
+from students.visualizer import show_student_performance
+
 
 def print_menu():
     """Display the main menu options."""
@@ -15,12 +17,13 @@ def print_menu():
     print("7. Export to CSV")
     print("8. Save & Exit")
     print("9. Import random students from API")
+    print("10. Visualize Student Performance")
 
 
 def main():
     """
     Run the Student Management System CLI.
-    
+
     Provides options to view, add, update, delete, search students,
     calculate class average, export data to csv, and save progress. 
     """""
@@ -29,16 +32,16 @@ def main():
 
     while True:
         print_menu()
-        choice = input("Choose an option (1-9): ").strip()
+        choice = input("Choose an option (1-10): ").strip()
 
         try:
             if choice == "1":
-               if not manager.students:
-                   print("⚠️ No students available.")
-               else:
-                   print("\n📃 Student list:")
-                   for i, student in enumerate(manager.students, start=1):
-                       print(f"{i}. {student}")
+                if not manager.students:
+                    print("⚠️ No students available.")
+                else:
+                    print("\n📃 Student list:")
+                    for i, student in enumerate(manager.students, start=1):
+                        print(f"{i}. {student}")
 
             elif choice == "2":
                 name = input("Enter student's name: ").strip()
@@ -103,6 +106,9 @@ def main():
                         print(f"✅ Added {student}")
                     except StudentExistsError:
                         print(f"⚠️ {student.name} already exists, skipped")
+
+            elif choice == "10":
+                show_student_performance(manager.students)
 
             else:
                 print("⚠️ Invalid choice, please choose 1-8.")
